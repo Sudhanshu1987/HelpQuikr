@@ -8,6 +8,7 @@ import helpquikr.commands.ngo.HelpQuikrCommandFactory;
 import helpquikr.core.AppealCategory;
 import helpquikr.core.AppealToBeShown;
 import helpquikr.core.CoreEngine;
+import helpquikr.core.ReminderFrequency;
 import helpquikr.core.UserRequest;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandDispatcher;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandQueue;
@@ -21,16 +22,16 @@ public class Driver {
 		List<AppealCategory> categories = new ArrayList<AppealCategory>();
 		categories.add(AppealCategory.EDUCATION);
 		categories.add(AppealCategory.ELDERLY);
-		List<AppealToBeShown> results = engine.fetchAppeals(new UserRequest(10000, 10, DayOfWeek.SUNDAY, categories, "test", "test", 17.412109, 78.381556));
+		List<AppealToBeShown> results = engine.fetchAppeals(new UserRequest(10000, 10, ReminderFrequency.EVERY_DAY, categories, "test", "test", 17.412109, 78.381556));
 		System.out.println(results);
 		
 		DefaultCommandDispatcher dispatcher = new DefaultCommandDispatcher(10, 100, new DefaultCommandQueue());
-//		dispatcher.startUp();	
+		dispatcher.startUp();	
 		
 		//DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "146585990:AAFnYLsYaEZvbiyhIIaG1cV2LscLPng7cVo", dispatcher, new HelpQuikrCommandFactory());
 		System.out.println("Initializing");
-		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "142924483:AAHC1eP6Axf7Y7geULsTiyPC5767wZUJZPI", dispatcher, new HelpQuikrCommandFactory());
-//		watcher.startUp(); 
+		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "159709116:AAHKiCMjH_UHg7JoxhrVLIDjpowQoqxDqfg", dispatcher, new HelpQuikrCommandFactory());
+		watcher.startUp(); 
 	}
 	
 	

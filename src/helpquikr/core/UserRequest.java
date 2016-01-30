@@ -7,14 +7,14 @@ public class UserRequest {
 
 	private long amountThreshold;
 	private int distanceThreshold = 5;
-	private DayOfWeek remindEvery;
+	private ReminderFrequency remindEvery;
 	private List<AppealCategory> categoriesInterested;
 	private String chatId;
 	private String userId;
 	private double latitude;
 	private double longitude;
 	
-	public UserRequest(long amountThreshold, int distanceThreshold, DayOfWeek remindEvery, List<AppealCategory> categoriesInterested,
+	public UserRequest(long amountThreshold, int distanceThreshold, ReminderFrequency remindEvery, List<AppealCategory> categoriesInterested,
 			String chatId, String userId, double latitude, double longitude) {
 		this.amountThreshold = amountThreshold;
 		this.remindEvery = remindEvery;
@@ -30,7 +30,7 @@ public class UserRequest {
 		return amountThreshold;
 	}
 
-	public DayOfWeek getRemindEvery() {
+	public ReminderFrequency getRemindEvery() {
 		return remindEvery;
 	}
 

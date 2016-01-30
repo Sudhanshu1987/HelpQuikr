@@ -15,6 +15,18 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 	public Command createCommand(Message message, RequestHandler requestHandler) {
 		// TODO Auto-generated method stub
 		System.out.println("Creating command1");
+		
+		switch (message.getText()) {
+		case "getAppeals" :
+			String command = HelpQuikrContext.getInstance().currentCommandList.get(message.getFromUser().getId());
+			if (command != null && !command.isEmpty()){
+				
+			}else {
+				HelpQuikrContext.getInstance().currentCommandList.put(message.getFromUser().getId(),"getAppeals");
+			}
+		case "registerNGO" :
+		case "addAppeal" :
+		}
 		return new HelpQuikrCommand1(message, requestHandler);
 	}
 

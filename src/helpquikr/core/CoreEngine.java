@@ -2,13 +2,18 @@ package helpquikr.core;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import helpquikr.utils.CommonUtils;
+import io.github.nixtabyte.telegram.jtelebot.request.TelegramRequest;
+import io.github.nixtabyte.telegram.jtelebot.request.factory.TelegramRequestFactory;
+import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
 
 public class CoreEngine {
 	
@@ -16,8 +21,8 @@ public class CoreEngine {
 	private List<Appeal> appealList = new ArrayList<Appeal>();
 	private ScheduledExecutorService execService = Executors.newScheduledThreadPool(20);
 	
+	
 	public CoreEngine() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public void registerNGO(String ngoName) {
@@ -57,9 +62,21 @@ public class CoreEngine {
 		return filteredList;
 	}
 	
-	public void raiseAsyncFetchRequest(UserRequest req) {
-		
-		//execService.scheduleWithFixedDelay(command, initialDelay, delay, unit);
+	public void sendAppealsToUser(UserRequest req, List<AppealToBeShown> appeals) {
+//		TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(req.getChatId(), "HelpQuikr", true, message.getId(), null);
+//		requestHandler.sendRequest(request);
+	}
+	
+	public void raiseAsyncFetchRequest(final UserRequest req) {
+		execService.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				List<AppealToBeShown> appeals = fetchAppeals(req);
+				sendAppealsToUser(req, appeals);
+			}
+			
+		}, 0, 1, TimeUnit.MINUTES);
 	}
 
 	public void populateDummyData() {
