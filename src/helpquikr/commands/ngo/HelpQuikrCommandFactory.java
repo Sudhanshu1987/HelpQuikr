@@ -1,6 +1,6 @@
-package helpquikr.commands;
+package helpquikr.commands.ngo;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import io.github.nixtabyte.telegram.jtelebot.client.RequestHandler;
 import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
@@ -15,7 +15,7 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 	public Command createCommand(Message message, RequestHandler requestHandler) {
 		// TODO Auto-generated method stub
 		System.out.println("Creating command1");
-		logger.info(message.getText());
 		return new HelpQuikrCommand1(message, requestHandler);
 	}
+
 }

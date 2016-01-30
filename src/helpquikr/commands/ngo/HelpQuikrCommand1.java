@@ -1,4 +1,4 @@
-package helpquikr.commands;
+package helpquikr.commands.ngo;
 
 import java.util.logging.Logger;
 

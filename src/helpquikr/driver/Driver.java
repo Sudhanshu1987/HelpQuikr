@@ -1,6 +1,6 @@
 package helpquikr.driver;
 
-import helpquikr.commands.HelpQuikrCommandFactory;
+import helpquikr.commands.ngo.HelpQuikrCommandFactory;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandDispatcher;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandQueue;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandWatcher;
