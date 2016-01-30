@@ -50,4 +50,11 @@ public class Appeal {
 		return longitude;
 	}
 
+	@Override
+	public String toString() {
+		return "Appeal [appealId=" + appealId + ", ngoName=" + ngoName + ", category=" + category + ", benificiaryName="
+				+ benificiaryName + ", amount=" + amount + ", latitude=" + latitude + ", longitude=" + longitude + "]";
+	}
+
+	
 }

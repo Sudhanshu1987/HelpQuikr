@@ -11,15 +11,19 @@ public class UserRequest {
 	private List<AppealCategory> categoriesInterested;
 	private String chatId;
 	private String userId;
-
+	private double latitude;
+	private double longitude;
+	
 	public UserRequest(long amountThreshold, int distanceThreshold, DayOfWeek remindEvery, List<AppealCategory> categoriesInterested,
-			String chatId, String userId) {
+			String chatId, String userId, double latitude, double longitude) {
 		this.amountThreshold = amountThreshold;
 		this.remindEvery = remindEvery;
 		this.categoriesInterested = categoriesInterested;
 		this.chatId = chatId;
 		this.userId = userId;
 		this.distanceThreshold = distanceThreshold;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
 	public long getAmountThreshold() {
@@ -41,4 +45,18 @@ public class UserRequest {
 	public String getUserId() {
 		return userId;
 	}
+
+	public int getDistanceThreshold() {
+		return distanceThreshold;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+	
+	
 }

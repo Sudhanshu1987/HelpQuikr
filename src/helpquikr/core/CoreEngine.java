@@ -1,15 +1,20 @@
 package helpquikr.core;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+import helpquikr.utils.CommonUtils;
 
 public class CoreEngine {
 	
 	private Map<String, NGO> ngoMap = new HashMap<String, NGO>();
 	private List<Appeal> appealList = new ArrayList<Appeal>();
+	private ScheduledExecutorService execService = Executors.newScheduledThreadPool(20);
 	
 	public CoreEngine() {
 		// TODO Auto-generated constructor stub
@@ -24,24 +29,52 @@ public class CoreEngine {
 		
 	}
 	
-	public List<Appeal> fetchAppeals(UserRequest req) {
-		List<Appeal> filteredList = new ArrayList<Appeal>();
+	public List<AppealToBeShown> fetchAppeals(UserRequest req) {
+		List<AppealToBeShown> filteredList = new ArrayList<AppealToBeShown>();
 		for (Appeal appeal : appealList) {
-			if (req.getCategoriesInterested().contains(appeal.getCategory()) && appeal.getAmount() <= req.getAmountThreshold() && withinDistanceThreshold(appeal, req)) {
-				filteredList.add(appeal);
+			if (req.getCategoriesInterested().contains(appeal.getCategory()) && appeal.getAmount() <= req.getAmountThreshold()) {
+				double distance = CommonUtils.CalculateDistance(appeal.getLatitude(), appeal.getLongitude(), req.getLatitude(), req.getLongitude());
+				System.out.println("Shorlisted appeal --> " + appeal + ". Distance : " + distance);
+				if (distance <= req.getDistanceThreshold()) {
+					filteredList.add(new AppealToBeShown(appeal, distance));
+				}
 			}
 		}
+		
+		filteredList.sort(new Comparator<AppealToBeShown>() {
+			@Override
+			public int compare(AppealToBeShown arg0, AppealToBeShown arg1) {
+				if (arg0.getDistanceFromUser() == arg1.getDistanceFromUser()) {
+					return 0;
+				} else if (arg0.getDistanceFromUser() < arg1.getDistanceFromUser()) {
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+		});
 		
 		return filteredList;
 	}
 	
-	private boolean withinDistanceThreshold(Appeal appeal, UserRequest req) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public void raiseAsyncFetchRequest(UserRequest req) {
 		
+		//execService.scheduleWithFixedDelay(command, initialDelay, delay, unit);
+	}
+
+	public void populateDummyData() {
+		for (int i = 1; i <= 10; i++) {
+			ngoMap.put("NGO" + i, new NGO("NGO" + i));
+		}
+		
+		appealList.add(new Appeal("P1", "NGO1", AppealCategory.EDUCATION, 9000, 17.409186, 78.390415));
+		appealList.add(new Appeal("P2", "NGO2", AppealCategory.EDUCATION, 7000, 17.412109, 78.381556));
+		appealList.add(new Appeal("P3", "NGO3", AppealCategory.EDUCATION, 20000, 17.420851, 78.384839));
+		appealList.add(new Appeal("P4", "NGO4", AppealCategory.MEDICAL, 5000, 17.423103, 78.411232));
+		appealList.add(new Appeal("P5", "NGO5", AppealCategory.MEDICAL, 5600, 17.429839, 78.426445));
+		appealList.add(new Appeal("P6", "NGO6", AppealCategory.ELDERLY, 8000, 17.437980, 78.456887));
+		appealList.add(new Appeal("P7", "NGO7", AppealCategory.ELDERLY, 100000, 12.979965, 77.581481));
+		appealList.add(new Appeal("P8", "NGO8", AppealCategory.CLOTHES, 12000, 12.976907, 77.589456));
 	}
 	
 }
