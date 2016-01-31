@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import helpquikr.commands.help.ShowHelpCommand;
 import helpquikr.core.UserRequest;
 import io.github.nixtabyte.telegram.jtelebot.client.RequestHandler;
+import io.github.nixtabyte.telegram.jtelebot.response.json.Location;
 import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
 import io.github.nixtabyte.telegram.jtelebot.server.Command;
 import io.github.nixtabyte.telegram.jtelebot.server.CommandFactory;
@@ -31,6 +32,17 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 			}
 		}
 		
+		if(message.getText() == null && message.getLocation() != null){
+			Location location = message.getLocation();
+			HelpQuikrContext.getInstance().props.setProperty("location", location.getLatitude() + "," + location.getLongitude());
+			return new PropertyAddedCommand(message, requestHandler, "location");
+		}
+		
+		if(message.getText().equals("setLocation")){
+			Location location = message.getLocation();			
+			return new AddLocationCommand(message, requestHandler);
+		}
+		
 		if (message.getText().equalsIgnoreCase("/done")) {
 			return handleDone(message, requestHandler);
 		}
@@ -52,7 +64,7 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 					return new SendAppealsCommand(message, requestHandler);
 				case "/notifyme": 
 					return new PushAsyncAppealsCommand(message, requestHandler);
-				case "/registerngo" : 
+				case "/registerngo" :
 					return new RegisterNGOCommand(message, requestHandler);
 			}
 		}

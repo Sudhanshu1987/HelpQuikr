@@ -49,7 +49,6 @@ public class HelpQuikrContext {
 				"ngoname     <ngoname>\n\n" +							
 				"Type /done to register the NGO";
 		commandsHelp.put("/registerngo", registerNgo);
-		
 		String notifyme = "Please enter the below commands-\n" +
 				"setAmountRange      <amountvalue>\n" +
 				"setDistanceRange    <distance>\n" +

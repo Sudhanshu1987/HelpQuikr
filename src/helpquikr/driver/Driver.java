@@ -16,8 +16,8 @@ public class Driver {
 		CoreEngine engine = CoreEngine.INST;
 		engine.populateDummyData();		
 		List<AppealCategory> categories = new ArrayList<AppealCategory>();
-		categories.add(AppealCategory.EDUCATION);
-		categories.add(AppealCategory.ELDERLY);
+		categories.add(AppealCategory.education);
+		categories.add(AppealCategory.elderly);
 		
 		DefaultCommandDispatcher dispatcher = new DefaultCommandDispatcher(10, 100, new DefaultCommandQueue());
 		dispatcher.startUp();	
@@ -25,7 +25,7 @@ public class Driver {
 		System.out.println("Initializing");
 		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "146585990:AAFnYLsYaEZvbiyhIIaG1cV2LscLPng7cVo", dispatcher, new HelpQuikrCommandFactory());
 //		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "159709116:AAHKiCMjH_UHg7JoxhrVLIDjpowQoqxDqfg", dispatcher, new HelpQuikrCommandFactory());
-		watcher.startUp(); 
+		watcher.startUp();
 	}
 	
 	

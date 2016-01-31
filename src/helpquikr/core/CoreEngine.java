@@ -93,15 +93,15 @@ public class CoreEngine {
 		for (int i = 1; i <= 10; i++) {
 			ngoMap.put("NGO" + i, new NGO("NGO" + i));
 		}
-
-		appealList.add(new Appeal("P1", "NGO1", AppealCategory.EDUCATION, 9000, 17.409186, 78.390415));
-		appealList.add(new Appeal("P2", "NGO2", AppealCategory.EDUCATION, 7000, 17.412109, 78.381556));
-		appealList.add(new Appeal("P3", "NGO3", AppealCategory.EDUCATION, 20000, 17.420851, 78.384839));
-		appealList.add(new Appeal("P4", "NGO4", AppealCategory.MEDICAL, 5000, 17.423103, 78.411232));
-		appealList.add(new Appeal("P5", "NGO5", AppealCategory.MEDICAL, 5600, 17.429839, 78.426445));
-		appealList.add(new Appeal("P6", "NGO6", AppealCategory.ELDERLY, 8000, 17.437980, 78.456887));
-		appealList.add(new Appeal("P7", "NGO7", AppealCategory.ELDERLY, 100000, 12.979965, 77.581481));
-		appealList.add(new Appeal("P8", "NGO8", AppealCategory.CLOTHES, 12000, 12.976907, 77.589456));
+		
+		appealList.add(new Appeal("P1", "NGO1", AppealCategory.education, 9000, 17.409186, 78.390415));
+		appealList.add(new Appeal("P2", "NGO2", AppealCategory.education, 7000, 17.412109, 78.381556));
+		appealList.add(new Appeal("P3", "NGO3", AppealCategory.education, 20000, 17.420851, 78.384839));
+		appealList.add(new Appeal("P4", "NGO4", AppealCategory.medical, 5000, 17.423103, 78.411232));
+		appealList.add(new Appeal("P5", "NGO5", AppealCategory.medical, 5600, 17.429839, 78.426445));
+		appealList.add(new Appeal("P6", "NGO6", AppealCategory.elderly, 8000, 17.437980, 78.456887));
+		appealList.add(new Appeal("P7", "NGO7", AppealCategory.elderly, 100000, 12.979965, 77.581481));
+		appealList.add(new Appeal("P8", "NGO8", AppealCategory.clothes, 12000, 12.976907, 77.589456));
 	}
 
 }
