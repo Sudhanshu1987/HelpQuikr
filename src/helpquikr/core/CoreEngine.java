@@ -93,7 +93,6 @@ public class CoreEngine {
 		for (int i = 1; i <= 10; i++) {
 			ngoMap.put("NGO" + i, new NGO("NGO" + i));
 		}
-		
 		appealList.add(new Appeal("P1", "NGO1", AppealCategory.education, 9000, 17.409186, 78.390415));
 		appealList.add(new Appeal("P2", "NGO2", AppealCategory.education, 7000, 17.412109, 78.381556));
 		appealList.add(new Appeal("P3", "NGO3", AppealCategory.education, 20000, 17.420851, 78.384839));
