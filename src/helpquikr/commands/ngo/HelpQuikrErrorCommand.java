@@ -12,7 +12,7 @@ import io.github.nixtabyte.telegram.jtelebot.server.impl.AbstractCommand;
 
 public class HelpQuikrErrorCommand extends AbstractCommand {
 
-	private static final Logger logger = Logger.getLogger(HelpQuikrCommand1.class.getName());
+	private static final Logger logger = Logger.getLogger(HelpQuikrErrorCommand.class.getName());
 	public HelpQuikrErrorCommand(Message message, RequestHandler requestHandler) {
 		super(message, requestHandler);
 		// TODO Auto-generated constructor stub

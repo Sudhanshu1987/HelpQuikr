@@ -5,8 +5,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import helpquikr.commands.help.ShowHelpCommand;
-import helpquikr.core.Appeal;
-import helpquikr.core.AppealCategory;
 import helpquikr.core.AppealToBeShown;
 import helpquikr.core.CoreEngine;
 import helpquikr.core.UserRequest;
@@ -20,8 +18,6 @@ import io.github.nixtabyte.telegram.jtelebot.server.CommandFactory;
 public class HelpQuikrCommandFactory implements CommandFactory {
 
 	private static final Logger logger = Logger.getLogger(HelpQuikrCommandFactory.class.getName());
-
-	CoreEngine coreEngine = new CoreEngine();
 	//UserRequest userRequest = new UserRequest();
 	
 	@Override
@@ -33,7 +29,7 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 			return new ShowHelpCommand(message, requestHandler);
 		}
 		
-		if (message.getText().equalsIgnoreCase("done")) {
+		if (message.getText().equalsIgnoreCase("/done")) {
 			return handleDone(message, requestHandler);
 		}
 		
@@ -48,35 +44,10 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 
 		if (command != null && !command.isEmpty()){				
 			switch (command) {
-				case "addappeal" : {
-					Appeal appeal = new Appeal();
-					Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
-					for(String key : keys){
-						String value = HelpQuikrContext.getInstance().props.getProperty(key);
-						switch(key) {
-							case "ngoname":
-								appeal.setNgoName(value);
-								break;
-							case "benificiaryname":
-								appeal.setBenificiaryName(value);
-								break;
-							case "category":
-								appeal.setCategory(AppealCategory.valueOf(value));
-								break;
-							case "amount":
-								appeal.setAmount(Long.parseLong(value));
-								break;
-							case "location":
-								String[] location = value.split(",");
-								appeal.setLatitude(Double.parseDouble(location[0]));
-								appeal.setLongitude(Double.parseDouble(location[1]));
-								break;
-						}
-					}
-					coreEngine.addAppeal(appeal);
+				case "/addappeal" : {
 					return new AddAppealCommand(message, requestHandler);
 				}
-				case "getappeals" : {
+				case "/getappeals" : {
 					UserRequest userRequest = HelpQuikrContext.getInstance().currentUserRequest.get(message.getFromUser().getId());
 					if(userRequest == null){
 						userRequest = new UserRequest();
@@ -98,9 +69,9 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 								userRequest.setCategoriesInterested(value.split(","));
 						}
 					}
-					List<AppealToBeShown> appeals = coreEngine.fetchAppeals(userRequest);
+					List<AppealToBeShown> appeals = CoreEngine.INST.fetchAppeals(userRequest);
 					try {
-						coreEngine.sendAppealsToUser(message, requestHandler, appeals);
+						CoreEngine.INST.sendAppealsToUser(message, requestHandler, appeals);
 					} catch (JsonParsingException | TelegramServerException e) {
 						e.printStackTrace();
 					}

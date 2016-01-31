@@ -17,7 +17,7 @@ import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandWatcher;
 public class Driver {
 
 	public static void main(String[] args) {
-		CoreEngine engine = new CoreEngine();
+		CoreEngine engine = CoreEngine.INST;
 		engine.populateDummyData();		
 		List<AppealCategory> categories = new ArrayList<AppealCategory>();
 		categories.add(AppealCategory.EDUCATION);
@@ -28,7 +28,7 @@ public class Driver {
 		
 		//DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "146585990:AAFnYLsYaEZvbiyhIIaG1cV2LscLPng7cVo", dispatcher, new HelpQuikrCommandFactory());
 		System.out.println("Initializing");
-		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "159709116:AAHKiCMjH_UHg7JoxhrVLIDjpowQoqxDqfg", dispatcher, new HelpQuikrCommandFactory());
+		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "142924483:AAHC1eP6Axf7Y7geULsTiyPC5767wZUJZPI", dispatcher, new HelpQuikrCommandFactory());
 		watcher.startUp(); 
 	}
 	

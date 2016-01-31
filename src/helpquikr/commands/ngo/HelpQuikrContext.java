@@ -20,7 +20,7 @@ public class HelpQuikrContext {
 	
 	public Map<String, String> commandsHelp = new HashMap<String, String>();
 
-	private static HelpQuikrContext INST = getInstance();
+	private static HelpQuikrContext INST = new HelpQuikrContext();
 	
 	private HelpQuikrContext() {
 		initializeCommandsHelp();
@@ -32,21 +32,23 @@ public class HelpQuikrContext {
 							"ngoname <ngoname>\n" +
 							"benificiaryname <benificiaryname>\n" +
 							"category <category1,category2...>\n" +
+							"Category Options - EDUCATION, MEDICAL, CLOTHES, ELDERLY \n" +
 							"location <lattitude,longitude>\n" +
 							"type /done to store the appeal";
-		commandsHelp.put("addappeals", addAppeals);
+		commandsHelp.put("/addappeal", addAppeals);
 		
 		String getAppeals = "Please enter the below commands-\n" +
 				"setAmountRange <amountvalue>\n" +
 				"setDistanceRange <distance>\n" +
-				"setCategory <category1,category2...>\n" +			
+				"setCategory <category1,category2...>\n" +	
+				"Category Options - EDUCATION, MEDICAL, CLOTHES, ELDERLY \n" +
 				"type /done to fetch the appeals around you";	
-		commandsHelp.put("getappeals", addAppeals);
+		commandsHelp.put("/getappeals", getAppeals);
 		
 		String registerNgo = "Please enter the below commands-\n" +
 				"ngoname <ngoname>\n" +							
 				"type /done to fetch the appeals around you";
-		commandsHelp.put("registerNgo", registerNgo);
+		commandsHelp.put("/registerngo", registerNgo);
 		
 		String registerReminder = "Please enter the below commands-\n" +
 				"amount <amountvalue>\n" +
@@ -57,7 +59,7 @@ public class HelpQuikrContext {
 				"reminderFrequency <frequency>\n" +
 				"frequency is an integer-> 0-EVERY_MINUTE, 1-EVERY_DAY, 2-EVERY_WEEK, 3-EVERY_FORTNIGHT, 4-EVERY_MONTH\n" +
 				"type /done to store the appeal";
-		commandsHelp.put("registerreminder", registerReminder);
+		commandsHelp.put("/registerreminder", registerReminder);
 	}
 	
 	public static HelpQuikrContext getInstance() {

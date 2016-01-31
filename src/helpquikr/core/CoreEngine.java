@@ -25,8 +25,9 @@ public class CoreEngine {
 	private List<Appeal> appealList = new ArrayList<Appeal>();
 	private ScheduledExecutorService execService = Executors.newScheduledThreadPool(20);
 	
+	public static final CoreEngine INST = new CoreEngine();
 	
-	public CoreEngine() {
+	private CoreEngine() {
 	}
 
 	public void registerNGO(String ngoName) {
