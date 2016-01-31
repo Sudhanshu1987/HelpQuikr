@@ -12,7 +12,6 @@ import io.github.nixtabyte.telegram.jtelebot.exception.TelegramServerException;
 import io.github.nixtabyte.telegram.jtelebot.request.TelegramRequest;
 import io.github.nixtabyte.telegram.jtelebot.request.factory.TelegramRequestFactory;
 import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
-import io.github.nixtabyte.telegram.jtelebot.server.Command;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.AbstractCommand;
 
 public class AddAppealCommand extends AbstractCommand {

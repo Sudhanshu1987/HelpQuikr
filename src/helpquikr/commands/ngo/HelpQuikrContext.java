@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import helpquikr.core.AppealCategory;
 import helpquikr.core.UserRequest;
 
 public class HelpQuikrContext {

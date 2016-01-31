@@ -1,16 +1,11 @@
 package helpquikr.commands.ngo;
 
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import helpquikr.commands.help.ShowHelpCommand;
-import helpquikr.core.AppealToBeShown;
-import helpquikr.core.CoreEngine;
 import helpquikr.core.UserRequest;
 import io.github.nixtabyte.telegram.jtelebot.client.RequestHandler;
-import io.github.nixtabyte.telegram.jtelebot.exception.JsonParsingException;
-import io.github.nixtabyte.telegram.jtelebot.exception.TelegramServerException;
 import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
 import io.github.nixtabyte.telegram.jtelebot.server.Command;
 import io.github.nixtabyte.telegram.jtelebot.server.CommandFactory;
@@ -18,13 +13,15 @@ import io.github.nixtabyte.telegram.jtelebot.server.CommandFactory;
 public class HelpQuikrCommandFactory implements CommandFactory {
 
 	private static final Logger logger = Logger.getLogger(HelpQuikrCommandFactory.class.getName());
-	//UserRequest userRequest = new UserRequest();
 	
 	@Override
 	public Command createCommand(Message message, RequestHandler requestHandler) {
 		String command = HelpQuikrContext.getInstance().currentCommandList.get(message.getFromUser().getId());
 		
 		if (command == null) {
+			if (message.getText().startsWith("[")) {
+				return new ProcessingCommand(message, requestHandler);
+			}
 			HelpQuikrContext.getInstance().currentCommandList.put(message.getFromUser().getId(), message.getText());
 			return new ShowHelpCommand(message, requestHandler);
 		}
@@ -53,8 +50,6 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 						userRequest = new UserRequest();
 						userRequest.setChatId(message.getChat().getId());
 						userRequest.setUserId(message.getFromUser().getId());
-						userRequest.setLatitude(message.getLocation().getLatitude());
-						userRequest.setLongitude(message.getLocation().getLongitude());
 					}				
 					
 					Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
@@ -63,19 +58,21 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 						switch(key) {
 							case "setAmountRange":
 								userRequest.setAmountThreshold(Long.parseLong(value));
+								break;
 							case "setDistanceRange":
 								userRequest.setDistanceThreshold(Integer.parseInt(value));
+								break;
 							case "setCategory":
 								userRequest.setCategoriesInterested(value.split(","));
+								break;
+							case "userLocation":
+								String[] params = value.split(",");
+								userRequest.setLatitude(Double.parseDouble(params[0]));
+								userRequest.setLongitude(Double.parseDouble(params[1]));
+								break;
 						}
 					}
-					List<AppealToBeShown> appeals = CoreEngine.INST.fetchAppeals(userRequest);
-					try {
-						CoreEngine.INST.sendAppealsToUser(message, requestHandler, appeals);
-					} catch (JsonParsingException | TelegramServerException e) {
-						e.printStackTrace();
-					}
-					return new SendAppealsCommand();
+					return new SendAppealsCommand(message, requestHandler, userRequest);
 				}
 				case "/registerngo" : {
 					return new RegisterNGOCommand(message, requestHandler);

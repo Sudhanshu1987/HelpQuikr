@@ -1,15 +1,11 @@
 package helpquikr.driver;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
 import helpquikr.commands.ngo.HelpQuikrCommandFactory;
 import helpquikr.core.AppealCategory;
-import helpquikr.core.AppealToBeShown;
 import helpquikr.core.CoreEngine;
-import helpquikr.core.ReminderFrequency;
-import helpquikr.core.UserRequest;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandDispatcher;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandQueue;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.DefaultCommandWatcher;
