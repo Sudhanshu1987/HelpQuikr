@@ -1,6 +1,7 @@
 package helpquikr.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,8 +37,9 @@ public class CoreEngine {
 	
 	public List<AppealToBeShown> fetchAppeals(UserRequest req) {
 		List<AppealToBeShown> filteredList = new ArrayList<AppealToBeShown>();
+		List<String> categoryList = Arrays.asList(req.getCategoriesInterested());
 		for (Appeal appeal : appealList) {
-			if (req.getCategoriesInterested().contains(appeal.getCategory()) && appeal.getAmount() <= req.getAmountThreshold()) {
+			if (categoryList.contains(appeal.getCategory().name()) && appeal.getAmount() <= req.getAmountThreshold()) {
 				double distance = CommonUtils.CalculateDistance(appeal.getLatitude(), appeal.getLongitude(), req.getLatitude(), req.getLongitude());
 				System.out.println("Shorlisted appeal --> " + appeal + ". Distance : " + distance);
 				if (distance <= req.getDistanceThreshold()) {

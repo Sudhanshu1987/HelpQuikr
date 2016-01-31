@@ -1,5 +1,6 @@
 package helpquikr.commands.ngo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -38,12 +39,12 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 		case "addAppeal" :
 		case "done" :
 			command = HelpQuikrContext.getInstance().currentCommandList.get(message.getFromUser().getId());
-			if (command != null && !command.isEmpty()){
+			if (command != null && !command.isEmpty()){				
 				UserRequest userRequest = HelpQuikrContext.getInstance().currentUserRequest.get(message.getFromUser().getId());
 				if(userRequest == null){
 					userRequest = new UserRequest();
 					userRequest.setChatId(message.getChat().getId());
-					userRequest.setUserId(message.getId());
+					userRequest.setUserId(message.getFromUser().getId());
 				}
 				
 				userRequest.setLatitude(message.getLocation().getLatitude());
@@ -52,13 +53,16 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 				Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
 				for(String key : keys){
 					String value = HelpQuikrContext.getInstance().props.getProperty(key);
-					switch(value) {
+					switch(key) {
 						case "setAmountRange":
+							userRequest.setAmountThreshold(Long.parseLong(value));
 						case "setDistanceRange":
-						case "setCategory":							
+							userRequest.setDistanceThreshold(Integer.parseInt(value));
+						case "setCategory":
+							userRequest.setCategoriesInterested(value.split(","));
 					}
 				}
-				message.getLocation().getLatitude();				
+				message.getLocation().getLatitude();
 				List<AppealToBeShown> appeals = coreEngine.fetchAppeals(userRequest);
 				
 				//coreEngine.fetchAppeals(req)

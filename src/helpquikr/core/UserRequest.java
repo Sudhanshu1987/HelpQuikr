@@ -8,7 +8,7 @@ public class UserRequest {
 	private long amountThreshold;
 	private int distanceThreshold = 5;
 	private ReminderFrequency remindEvery;
-	private List<AppealCategory> categoriesInterested;
+	private String[] categoriesInterested;
 	private Long chatId;
 	private Long userId;
 	private double latitude;
@@ -17,7 +17,7 @@ public class UserRequest {
 	public UserRequest() {		
 	}
 	
-	public UserRequest(long amountThreshold, int distanceThreshold, ReminderFrequency remindEvery, List<AppealCategory> categoriesInterested,
+	public UserRequest(long amountThreshold, int distanceThreshold, ReminderFrequency remindEvery, String[] categoriesInterested,
 			Long chatId, Long userId, double latitude, double longitude) {
 		this.amountThreshold = amountThreshold;
 		this.remindEvery = remindEvery;
@@ -41,7 +41,7 @@ public class UserRequest {
 		this.remindEvery = remindEvery;
 	}
 
-	public void setCategoriesInterested(List<AppealCategory> categoriesInterested) {
+	public void setCategoriesInterested(String[] categoriesInterested) {
 		this.categoriesInterested = categoriesInterested;
 	}
 
@@ -69,15 +69,15 @@ public class UserRequest {
 		return remindEvery;
 	}
 
-	public List<AppealCategory> getCategoriesInterested() {
+	public String[] getCategoriesInterested() {
 		return categoriesInterested;
 	}
 
-	public String getChatId() {
+	public Long getChatId() {
 		return chatId;
 	}
 
-	public String getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
@@ -92,6 +92,6 @@ public class UserRequest {
 	public double getLongitude() {
 		return longitude;
 	}
-	
+
 	
 }
