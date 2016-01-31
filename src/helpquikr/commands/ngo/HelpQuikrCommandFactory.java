@@ -77,6 +77,9 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 				case "/registerngo" : {
 					return new RegisterNGOCommand(message, requestHandler);
 				}
+				case "/registerreminder" : {
+					return new RegisterReminderCommand(message, requestHandler);
+				}
 			}
 		}
 		return new HelpQuikrErrorCommand(message, requestHandler);

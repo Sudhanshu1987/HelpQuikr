@@ -3,7 +3,7 @@ package helpquikr.commands.ngo;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import helpquikr.core.AppealCategory;
+import helpquikr.core.CoreEngine;
 import io.github.nixtabyte.telegram.jtelebot.client.RequestHandler;
 import io.github.nixtabyte.telegram.jtelebot.exception.JsonParsingException;
 import io.github.nixtabyte.telegram.jtelebot.exception.TelegramServerException;
@@ -26,30 +26,19 @@ public class RegisterNGOCommand extends AbstractCommand {
 		Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
 		for(String key : keys){
 			String value = HelpQuikrContext.getInstance().props.getProperty(key);
-/*			switch(key) {
+			switch(key) {
 				case "ngoname":
-					appeal.setNgoName(value);
+					CoreEngine.INST.registerNGO(value);
 					break;
-				case "benificiaryname":
-					appeal.setBenificiaryName(value);
+				default:
 					break;
-				case "category":
-					appeal.setCategory(AppealCategory.valueOf(value));
-					break;
-				case "amount":
-					appeal.setAmount(Long.parseLong(value));
-					break;
-				case "location":
-					String[] location = value.split(",");
-					appeal.setLatitude(Double.parseDouble(location[0]));
-					appeal.setLongitude(Double.parseDouble(location[1]));
-					break;
-			}*/
+			}
 		}
 		try {
 			message.getText();
 			TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(message.getChat().getId(), "NGO registered Successfully", true, message.getId(), null);
 			requestHandler.sendRequest(request);
+			HelpQuikrContext.getInstance().props.clear();
 			logger.info("Executed RegisterNGO command");
 		} catch (JsonParsingException e) {
 			// TODO Auto-generated catch block

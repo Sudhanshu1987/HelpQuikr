@@ -37,7 +37,10 @@ public class AddAppealCommand extends AbstractCommand {
 					appeal.setBenificiaryName(value);
 					break;
 				case "category":
-					appeal.setCategory(AppealCategory.valueOf(value));
+					String[] categories = value.split(",");
+					for(String category : categories){
+						appeal.setCategory(AppealCategory.valueOf(category));
+					}
 					break;
 				case "amount":
 					appeal.setAmount(Long.parseLong(value));
@@ -62,7 +65,6 @@ public class AddAppealCommand extends AbstractCommand {
 		} catch (TelegramServerException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

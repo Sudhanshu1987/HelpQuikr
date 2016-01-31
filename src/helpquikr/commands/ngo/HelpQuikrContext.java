@@ -41,6 +41,7 @@ public class HelpQuikrContext {
 				"setDistanceRange <distance>\n" +
 				"setCategory <category1,category2...>\n" +	
 				"Category Options - EDUCATION, MEDICAL, CLOTHES, ELDERLY \n" +
+				"userLocation <lattitude,longitude>" +
 				"type /done to fetch the appeals around you";	
 		commandsHelp.put("/getappeals", getAppeals);
 		
@@ -50,11 +51,11 @@ public class HelpQuikrContext {
 		commandsHelp.put("/registerngo", registerNgo);
 		
 		String registerReminder = "Please enter the below commands-\n" +
-				"amount <amountvalue>\n" +
-				"ngoname <ngoname>\n" +
-				"benificiaryname <benificiaryname>\n" +
-				"category <category1,category2...>\n" +
-				"location <lattitude,longitude>\n" +
+				"setAmountRange <amountvalue>\n" +
+				"setDistanceRange <distance>\n" +
+				"setCategory <category1,category2...>\n" +	
+				"Category Options - EDUCATION, MEDICAL, CLOTHES, ELDERLY \n" +
+				"userLocation <lattitude,longitude>" +
 				"reminderFrequency <frequency>\n" +
 				"frequency is an integer-> 0-EVERY_MINUTE, 1-EVERY_DAY, 2-EVERY_WEEK, 3-EVERY_FORTNIGHT, 4-EVERY_MONTH\n" +
 				"type /done to store the appeal";
