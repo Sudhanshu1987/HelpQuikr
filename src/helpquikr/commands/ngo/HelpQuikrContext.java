@@ -5,13 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import helpquikr.core.UserRequest;
+
 public class HelpQuikrContext {
 
 	public static Map<String, ArrayList<String>> CommandMap;
 	// UserId Vs CurrentOngoingCommand
 	public Map<Long, String> currentCommandList = new HashMap<Long, String>();
 
-	public Properties props = new Properties(); 
+	public Map<Long, UserRequest> currentUserRequest = new HashMap<Long, UserRequest>();
+	
+	public Properties props = new Properties();
 	
 	private static HelpQuikrContext INST = new HelpQuikrContext();
 	private HelpQuikrContext() {
@@ -26,5 +30,4 @@ public class HelpQuikrContext {
 	public static HelpQuikrContext getInstance() {
 		return INST;
 	}
-
 }
