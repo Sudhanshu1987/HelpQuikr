@@ -1,6 +1,7 @@
 package helpquikr.commands.ngo;
 
 import java.util.List;
+import java.util.Set;
 
 import helpquikr.core.AppealToBeShown;
 import helpquikr.core.CoreEngine;
@@ -16,15 +17,39 @@ import io.github.nixtabyte.telegram.jtelebot.server.impl.AbstractCommand;
 
 public class SendAppealsCommand extends AbstractCommand {
 
-	private UserRequest userRequest;
-	public SendAppealsCommand(Message message, RequestHandler requestHandler, UserRequest userRequest) {
+	public SendAppealsCommand(Message message, RequestHandler requestHandler) {
 		super(message, requestHandler);
-		this.userRequest = userRequest;
 	}
 
 	@Override
 	public void execute() {
 		CoreEngine coreEngine = CoreEngine.INST;
+		UserRequest userRequest = new UserRequest();
+		userRequest.setChatId(message.getChat().getId());
+		userRequest.setUserId(message.getFromUser().getId());
+		userRequest.setMessageId(message.getId());
+		
+		Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
+		for(String key : keys){
+			String value = HelpQuikrContext.getInstance().props.getProperty(key);
+			switch(key) {
+				case "setAmountRange":
+					userRequest.setAmountThreshold(Long.parseLong(value));
+					break;
+				case "setDistanceRange":
+					userRequest.setDistanceThreshold(Integer.parseInt(value));
+					break;
+				case "setCategory":
+					userRequest.setCategoriesInterested(value.split(","));
+					break;
+				case "userLocation":
+					String[] params = value.split(",");
+					userRequest.setLatitude(Double.parseDouble(params[0]));
+					userRequest.setLongitude(Double.parseDouble(params[1]));
+					break;
+			}
+		}
+
 		List<AppealToBeShown> appeals = coreEngine.fetchAppeals(userRequest);
 		try {
 			sendAppealsToUser(message, requestHandler, appeals);
@@ -35,7 +60,7 @@ public class SendAppealsCommand extends AbstractCommand {
 
 	private void sendAppealsToUser(Message message, RequestHandler requestHandler, List<AppealToBeShown> appeals) throws JsonParsingException, TelegramServerException {
 		ReplyKeyboardMarkup rkm = new ReplyKeyboardMarkup();
-		rkm.setResizeKeyboard(true);
+		rkm.setResizeKeyboard(false);
 		rkm.setOneTimeKeyboard(true);
 		rkm.setSelective(false);
 		String results[][] = new String[appeals.size()][1]; 

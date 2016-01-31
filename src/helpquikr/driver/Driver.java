@@ -22,9 +22,9 @@ public class Driver {
 		DefaultCommandDispatcher dispatcher = new DefaultCommandDispatcher(10, 100, new DefaultCommandQueue());
 		dispatcher.startUp();	
 		
-		//DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "146585990:AAFnYLsYaEZvbiyhIIaG1cV2LscLPng7cVo", dispatcher, new HelpQuikrCommandFactory());
 		System.out.println("Initializing");
-		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "142924483:AAHC1eP6Axf7Y7geULsTiyPC5767wZUJZPI", dispatcher, new HelpQuikrCommandFactory());
+		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "146585990:AAFnYLsYaEZvbiyhIIaG1cV2LscLPng7cVo", dispatcher, new HelpQuikrCommandFactory());
+//		DefaultCommandWatcher watcher = new DefaultCommandWatcher(2000, 100, "159709116:AAHKiCMjH_UHg7JoxhrVLIDjpowQoqxDqfg", dispatcher, new HelpQuikrCommandFactory());
 		watcher.startUp(); 
 	}
 	

@@ -1,8 +1,10 @@
 package helpquikr.commands.ngo;
 
+import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
+import helpquikr.core.AppealToBeShown;
+import helpquikr.core.CoreEngine;
 import helpquikr.core.ReminderFrequency;
 import helpquikr.core.UserRequest;
 import io.github.nixtabyte.telegram.jtelebot.client.RequestHandler;
@@ -11,24 +13,22 @@ import io.github.nixtabyte.telegram.jtelebot.exception.TelegramServerException;
 import io.github.nixtabyte.telegram.jtelebot.request.TelegramRequest;
 import io.github.nixtabyte.telegram.jtelebot.request.factory.TelegramRequestFactory;
 import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
+import io.github.nixtabyte.telegram.jtelebot.response.json.ReplyKeyboardMarkup;
 import io.github.nixtabyte.telegram.jtelebot.server.impl.AbstractCommand;
 
-public class RegisterReminderCommand extends AbstractCommand {
+public class PushAsyncAppealsCommand extends AbstractCommand {
 
-	private static final Logger logger = Logger.getLogger(AddAppealCommand.class.getName());
-	
-	public RegisterReminderCommand(Message message, RequestHandler requestHandler) {
+	public PushAsyncAppealsCommand(Message message, RequestHandler requestHandler) {
 		super(message, requestHandler);
 	}
-	
+
 	@Override
 	public void execute() {
-		UserRequest userRequest = HelpQuikrContext.getInstance().currentUserRequest.get(message.getFromUser().getId());
-		if(userRequest == null){
-			userRequest = new UserRequest();
-			userRequest.setChatId(message.getChat().getId());
-			userRequest.setUserId(message.getFromUser().getId());
-		}				
+		CoreEngine coreEngine = CoreEngine.INST;
+		UserRequest userRequest = new UserRequest();
+		userRequest.setChatId(message.getChat().getId());
+		userRequest.setUserId(message.getFromUser().getId());
+		userRequest.setMessageId(message.getId());
 		
 		Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
 		for(String key : keys){
@@ -68,20 +68,36 @@ public class RegisterReminderCommand extends AbstractCommand {
 						default:
 							userRequest.setRemindEvery(ReminderFrequency.EVERY_MINUTE);
 					}
-			}
-			HelpQuikrContext.getInstance().currentUserRequest.put(userRequest.getUserId(),userRequest);
-			try {
-				TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(
-						message.getChat().getId(), "Reminder Added Successfully", true, message.getId(), 
-						null);
-				requestHandler.sendRequest(request);
-				logger.info("Executed AddAppealCommand");
-			} catch (JsonParsingException e) {
-				e.printStackTrace();
-			} catch (TelegramServerException e) {
-				e.printStackTrace();
+					break;
 			}
 		}
+
+		coreEngine.raiseAsyncFetchRequest(userRequest, this);
+		try {
+			TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(message.getChat().getId(), 
+					"Thank you! Your request is registered with us. Stay tuned for the notifications !", true, message.getId(), null);
+			requestHandler.sendRequest(request);
+		} catch (JsonParsingException | TelegramServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+
+	public void pushAppealsToUser(List<AppealToBeShown> appeals) throws JsonParsingException, TelegramServerException {
+		ReplyKeyboardMarkup rkm = new ReplyKeyboardMarkup();
+		rkm.setResizeKeyboard(false);
+		rkm.setOneTimeKeyboard(true);
+		rkm.setSelective(false);
+		String results[][] = new String[appeals.size()][1]; 
+		for (int i = 0; i < appeals.size(); i++) {
+			results[i][0] = appeals.get(i).toString();
+		}
+		rkm.setKeyboard(results);
+
+		TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(message.getChat().getId(), 
+				"Here are the appeals which you may be interested in! Please choose to donate ..", true, null, rkm);
+		requestHandler.sendRequest(request);
+	}
+	
 
 }

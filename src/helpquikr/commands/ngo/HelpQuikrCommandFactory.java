@@ -19,11 +19,16 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 		String command = HelpQuikrContext.getInstance().currentCommandList.get(message.getFromUser().getId());
 		
 		if (command == null) {
-			if (message.getText().startsWith("[")) {
+			String msg = message.getText();
+			if (msg.startsWith("[")) {
 				return new ProcessingCommand(message, requestHandler);
+			} else if (msg.equalsIgnoreCase("/getappeals") || msg.equalsIgnoreCase("/addappeal") || 
+					msg.equalsIgnoreCase("/registerngo") || msg.equalsIgnoreCase("/notifyme")) { 
+				HelpQuikrContext.getInstance().currentCommandList.put(message.getFromUser().getId(), message.getText());
+				return new ShowHelpCommand(message, requestHandler);
+			} else {
+				return new SuccessfullyExecutedCommand(message,requestHandler);
 			}
-			HelpQuikrContext.getInstance().currentCommandList.put(message.getFromUser().getId(), message.getText());
-			return new ShowHelpCommand(message, requestHandler);
 		}
 		
 		if (message.getText().equalsIgnoreCase("/done")) {
@@ -41,45 +46,14 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 
 		if (command != null && !command.isEmpty()){				
 			switch (command) {
-				case "/addappeal" : {
+				case "/addappeal" :
 					return new AddAppealCommand(message, requestHandler);
-				}
-				case "/getappeals" : {
-					UserRequest userRequest = HelpQuikrContext.getInstance().currentUserRequest.get(message.getFromUser().getId());
-					if(userRequest == null){
-						userRequest = new UserRequest();
-						userRequest.setChatId(message.getChat().getId());
-						userRequest.setUserId(message.getFromUser().getId());
-					}				
-					
-					Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
-					for(String key : keys){
-						String value = HelpQuikrContext.getInstance().props.getProperty(key);
-						switch(key) {
-							case "setAmountRange":
-								userRequest.setAmountThreshold(Long.parseLong(value));
-								break;
-							case "setDistanceRange":
-								userRequest.setDistanceThreshold(Integer.parseInt(value));
-								break;
-							case "setCategory":
-								userRequest.setCategoriesInterested(value.split(","));
-								break;
-							case "userLocation":
-								String[] params = value.split(",");
-								userRequest.setLatitude(Double.parseDouble(params[0]));
-								userRequest.setLongitude(Double.parseDouble(params[1]));
-								break;
-						}
-					}
-					return new SendAppealsCommand(message, requestHandler, userRequest);
-				}
-				case "/registerngo" : {
+				case "/getappeals" : 
+					return new SendAppealsCommand(message, requestHandler);
+				case "/notifyme": 
+					return new PushAsyncAppealsCommand(message, requestHandler);
+				case "/registerngo" : 
 					return new RegisterNGOCommand(message, requestHandler);
-				}
-				case "/registerreminder" : {
-					return new RegisterReminderCommand(message, requestHandler);
-				}
 			}
 		}
 		return new HelpQuikrErrorCommand(message, requestHandler);

@@ -18,7 +18,7 @@ public class AppealToBeShown {
 		this.ngoName = appeal.getNgoName();
 		this.benificiaryName = appeal.getBenificiaryName();
 		this.category = appeal.getCategory();
-		this.amount = appeal.getAmount();
+		this.amount = Math.round(appeal.getAmount());
 		this.latitude = appeal.getLatitude();
 		this.longitude = appeal.getLongitude();
 		this.distanceFromUser = distanceFromUser;

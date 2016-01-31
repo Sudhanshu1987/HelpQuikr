@@ -9,45 +9,52 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
+import helpquikr.commands.ngo.PushAsyncAppealsCommand;
 import helpquikr.utils.CommonUtils;
+import io.github.nixtabyte.telegram.jtelebot.exception.JsonParsingException;
+import io.github.nixtabyte.telegram.jtelebot.exception.TelegramServerException;
 
 public class CoreEngine {
-	
+
 	private Map<String, NGO> ngoMap = new HashMap<String, NGO>();
 	private List<Appeal> appealList = new ArrayList<Appeal>();
 	private ScheduledExecutorService execService = Executors.newScheduledThreadPool(20);
-	
+	private static final Logger logger = Logger.getLogger(CoreEngine.class.getName());
+
 	public static final CoreEngine INST = new CoreEngine();
-	
+
 	private CoreEngine() {
 	}
 
 	public void registerNGO(String ngoName) {
 		ngoMap.put(ngoName, new NGO(ngoName));
 	}
-	
-	public void addAppeal(String benificiaryName, String ngoName, long amount, AppealCategory category, double lat, double lon) {
-		appealList.add(new Appeal(benificiaryName, ngoName, category, amount, lat, lon));		
+
+	public void addAppeal(String benificiaryName, String ngoName, long amount, AppealCategory category, double lat,
+			double lon) {
+		appealList.add(new Appeal(benificiaryName, ngoName, category, amount, lat, lon));
 	}
-	
+
 	public void addAppeal(Appeal appeal) {
-		appealList.add(appeal);		
+		appealList.add(appeal);
 	}
-	
+
 	public List<AppealToBeShown> fetchAppeals(UserRequest req) {
 		List<AppealToBeShown> filteredList = new ArrayList<AppealToBeShown>();
 		List<String> categoryList = Arrays.asList(req.getCategoriesInterested());
 		for (Appeal appeal : appealList) {
 			if (categoryList.contains(appeal.getCategory().name()) && appeal.getAmount() <= req.getAmountThreshold()) {
-				double distance = CommonUtils.CalculateDistance(appeal.getLatitude(), appeal.getLongitude(), req.getLatitude(), req.getLongitude());
+				double distance = CommonUtils.CalculateDistance(appeal.getLatitude(), appeal.getLongitude(),
+						req.getLatitude(), req.getLongitude());
 				System.out.println("Shorlisted appeal --> " + appeal + ". Distance : " + distance);
 				if (distance <= req.getDistanceThreshold()) {
 					filteredList.add(new AppealToBeShown(appeal, distance));
 				}
 			}
 		}
-		
+
 		filteredList.sort(new Comparator<AppealToBeShown>() {
 			@Override
 			public int compare(AppealToBeShown arg0, AppealToBeShown arg1) {
@@ -60,28 +67,33 @@ public class CoreEngine {
 				}
 			}
 		});
-		
+
 		return filteredList;
 	}
-	
-	public void raiseAsyncFetchRequest(final UserRequest req) {
+
+	public void raiseAsyncFetchRequest(final UserRequest req, final PushAsyncAppealsCommand pushAsyncAppealsCommand) {
 		execService.scheduleAtFixedRate(new Runnable() {
 
 			@Override
 			public void run() {
+				logger.info("Executing push request");
 				List<AppealToBeShown> appeals = fetchAppeals(req);
-				// Emran - Implement this
-//				sendAppealsToUser(req, appeals);
+				try {
+					pushAsyncAppealsCommand.pushAppealsToUser(appeals);
+				} catch (JsonParsingException | TelegramServerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			
-		}, 0, 1, TimeUnit.MINUTES);
+
+		}, 1, 1, TimeUnit.MINUTES);
 	}
 
 	public void populateDummyData() {
 		for (int i = 1; i <= 10; i++) {
 			ngoMap.put("NGO" + i, new NGO("NGO" + i));
 		}
-		
+
 		appealList.add(new Appeal("P1", "NGO1", AppealCategory.EDUCATION, 9000, 17.409186, 78.390415));
 		appealList.add(new Appeal("P2", "NGO2", AppealCategory.EDUCATION, 7000, 17.412109, 78.381556));
 		appealList.add(new Appeal("P3", "NGO3", AppealCategory.EDUCATION, 20000, 17.420851, 78.384839));
@@ -91,5 +103,5 @@ public class CoreEngine {
 		appealList.add(new Appeal("P7", "NGO7", AppealCategory.ELDERLY, 100000, 12.979965, 77.581481));
 		appealList.add(new Appeal("P8", "NGO8", AppealCategory.CLOTHES, 12000, 12.976907, 77.589456));
 	}
-	
+
 }

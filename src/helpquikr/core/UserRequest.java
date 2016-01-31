@@ -1,8 +1,5 @@
 package helpquikr.core;
 
-import java.time.DayOfWeek;
-import java.util.List;
-
 public class UserRequest {
 
 	private long amountThreshold;
@@ -10,6 +7,7 @@ public class UserRequest {
 	private ReminderFrequency remindEvery;
 	private String[] categoriesInterested;
 	private Long chatId;
+	private Long messageId;
 	private Long userId;
 	private double latitude;
 	private double longitude;
@@ -91,6 +89,14 @@ public class UserRequest {
 
 	public double getLongitude() {
 		return longitude;
+	}
+
+	public Long getMessageId() {
+		return messageId;
+	}
+
+	public void setMessageId(Long messageId) {
+		this.messageId = messageId;
 	}
 
 	
