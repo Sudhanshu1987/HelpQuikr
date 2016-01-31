@@ -24,7 +24,8 @@ public class HelpQuikrContext {
 		questions.add("setAmountRange");
 		questions.add("setDistanceRange");
 		questions.add("setCategory");
-		CommandMap.put("getAppeals", questions);
+    	CommandMap.put("getAppeals", questions);
+    	
 	}
 	
 	public static HelpQuikrContext getInstance() {

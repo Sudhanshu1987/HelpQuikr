@@ -34,8 +34,11 @@ public class CoreEngine {
 	}
 	
 	public void addAppeal(String benificiaryName, String ngoName, long amount, AppealCategory category, double lat, double lon) {
-		appealList.add(new Appeal(benificiaryName, ngoName, category, amount, lat, lon));
-		
+		appealList.add(new Appeal(benificiaryName, ngoName, category, amount, lat, lon));		
+	}
+	
+	public void addAppeal(Appeal appeal) {
+		appealList.add(appeal);		
 	}
 	
 	public List<AppealToBeShown> fetchAppeals(UserRequest req) {
@@ -79,7 +82,7 @@ public class CoreEngine {
 		rkm.setKeyboard(results);
 
 		TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(message.getChat().getId(), 
-				"Here are the top appeals near you ...", true, message.getId(), null);
+				"Here are the top appeals near you ...", true, message.getId(), rkm);
 		requestHandler.sendRequest(request);
 	}
 	

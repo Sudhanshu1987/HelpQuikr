@@ -22,8 +22,6 @@ public class Driver {
 		List<AppealCategory> categories = new ArrayList<AppealCategory>();
 		categories.add(AppealCategory.EDUCATION);
 		categories.add(AppealCategory.ELDERLY);
-		List<AppealToBeShown> results = engine.fetchAppeals(new UserRequest());
-		System.out.println(results);
 		
 		DefaultCommandDispatcher dispatcher = new DefaultCommandDispatcher(10, 100, new DefaultCommandQueue());
 		dispatcher.startUp();	
