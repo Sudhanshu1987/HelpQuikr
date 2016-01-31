@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import helpquikr.core.AppealCategory;
 import helpquikr.core.UserRequest;
 
 public class HelpQuikrContext {
@@ -17,15 +18,46 @@ public class HelpQuikrContext {
 	
 	public Properties props = new Properties();
 	
-	private static HelpQuikrContext INST = new HelpQuikrContext();
+	public Map<String, String> commandsHelp = new HashMap<String, String>();
+
+	private static HelpQuikrContext INST = getInstance();
+	
 	private HelpQuikrContext() {
-		CommandMap = new HashMap<String, ArrayList<String>>();
-		ArrayList questions = new ArrayList<String>();
-		questions.add("setAmountRange");
-		questions.add("setDistanceRange");
-		questions.add("setCategory");
-    	CommandMap.put("getAppeals", questions);
-    	
+		initializeCommandsHelp();
+	}
+	
+	private void initializeCommandsHelp(){
+		String addAppeals = "Please enter the below commands-\n" +
+							"amount <amountvalue>\n" +
+							"ngoname <ngoname>\n" +
+							"benificiaryname <benificiaryname>\n" +
+							"category <category1,category2...>\n" +
+							"location <lattitude,longitude>\n" +
+							"type /done to store the appeal";
+		commandsHelp.put("addappeals", addAppeals);
+		
+		String getAppeals = "Please enter the below commands-\n" +
+				"setAmountRange <amountvalue>\n" +
+				"setDistanceRange <distance>\n" +
+				"setCategory <category1,category2...>\n" +			
+				"type /done to fetch the appeals around you";	
+		commandsHelp.put("getappeals", addAppeals);
+		
+		String registerNgo = "Please enter the below commands-\n" +
+				"ngoname <ngoname>\n" +							
+				"type /done to fetch the appeals around you";
+		commandsHelp.put("registerNgo", registerNgo);
+		
+		String registerReminder = "Please enter the below commands-\n" +
+				"amount <amountvalue>\n" +
+				"ngoname <ngoname>\n" +
+				"benificiaryname <benificiaryname>\n" +
+				"category <category1,category2...>\n" +
+				"location <lattitude,longitude>\n" +
+				"reminderFrequency <frequency>\n" +
+				"frequency is an integer-> 0-EVERY_MINUTE, 1-EVERY_DAY, 2-EVERY_WEEK, 3-EVERY_FORTNIGHT, 4-EVERY_MONTH\n" +
+				"type /done to store the appeal";
+		commandsHelp.put("registerreminder", registerReminder);
 	}
 	
 	public static HelpQuikrContext getInstance() {

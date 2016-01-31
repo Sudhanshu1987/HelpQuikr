@@ -74,7 +74,7 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 						}
 					}
 					coreEngine.addAppeal(appeal);
-					return new AddAppealCommand();
+					return new AddAppealCommand(message, requestHandler);
 				}
 				case "getappeals" : {
 					UserRequest userRequest = HelpQuikrContext.getInstance().currentUserRequest.get(message.getFromUser().getId());
