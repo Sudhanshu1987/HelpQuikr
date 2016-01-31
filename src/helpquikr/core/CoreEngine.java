@@ -31,8 +31,11 @@ public class CoreEngine {
 	}
 	
 	public void addAppeal(String benificiaryName, String ngoName, long amount, AppealCategory category, double lat, double lon) {
-		appealList.add(new Appeal(benificiaryName, ngoName, category, amount, lat, lon));
-		
+		appealList.add(new Appeal(benificiaryName, ngoName, category, amount, lat, lon));		
+	}
+	
+	public void addAppeal(Appeal appeal) {
+		appealList.add(appeal);		
 	}
 	
 	public List<AppealToBeShown> fetchAppeals(UserRequest req) {
