@@ -9,6 +9,8 @@ import helpquikr.core.AppealToBeShown;
 import helpquikr.core.CoreEngine;
 import helpquikr.core.UserRequest;
 import io.github.nixtabyte.telegram.jtelebot.client.RequestHandler;
+import io.github.nixtabyte.telegram.jtelebot.exception.JsonParsingException;
+import io.github.nixtabyte.telegram.jtelebot.exception.TelegramServerException;
 import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
 import io.github.nixtabyte.telegram.jtelebot.server.Command;
 import io.github.nixtabyte.telegram.jtelebot.server.CommandFactory;
@@ -29,7 +31,9 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 		case "getappeals" :
 			String command = HelpQuikrContext.getInstance().currentCommandList.get(message.getFromUser().getId());
 			if (command != null && !command.isEmpty()){
-				
+				String[] params = command.split(" ");
+				HelpQuikrContext.getInstance().props.setProperty(params[0], params[1]);
+				logger.info(HelpQuikrContext.getInstance().props.toString());
 			}else {
 				HelpQuikrContext.getInstance().currentCommandList.put(message.getFromUser().getId(),"getAppeals");
 				return new HelpQuikrCommand1(message, requestHandler);
@@ -45,10 +49,9 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 					userRequest = new UserRequest();
 					userRequest.setChatId(message.getChat().getId());
 					userRequest.setUserId(message.getFromUser().getId());
-				}
-				
-				userRequest.setLatitude(message.getLocation().getLatitude());
-				userRequest.setLongitude(message.getLocation().getLongitude());
+					userRequest.setLatitude(message.getLocation().getLatitude());
+					userRequest.setLongitude(message.getLocation().getLongitude());
+				}				
 				
 				Set<String> keys = HelpQuikrContext.getInstance().props.stringPropertyNames();				
 				for(String key : keys){
@@ -62,10 +65,12 @@ public class HelpQuikrCommandFactory implements CommandFactory {
 							userRequest.setCategoriesInterested(value.split(","));
 					}
 				}
-				message.getLocation().getLatitude();
 				List<AppealToBeShown> appeals = coreEngine.fetchAppeals(userRequest);
-				
-				//coreEngine.fetchAppeals(req)
+				try {
+					coreEngine.sendAppealsToUser(message, requestHandler, appeals);
+				} catch (JsonParsingException | TelegramServerException e) {
+					e.printStackTrace();
+				}
 			}else {
 				return new HelpQuikrErrorCommand(message, requestHandler);
 			}

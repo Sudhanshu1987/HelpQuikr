@@ -58,9 +58,7 @@ public class AppealToBeShown {
 
 	@Override
 	public String toString() {
-		return "AppealToBeShown [appealId=" + appealId + ", ngoName=" + ngoName + ", category=" + category
-				+ ", benificiaryName=" + benificiaryName + ", amount=" + amount + ", latitude=" + latitude
-				+ ", longitude=" + longitude + ", distanceFromUser=" + distanceFromUser + "]";
+		return "[" + ngoName + "] " + benificiaryName + "," + distanceFromUser + " km away, needs Rs." + amount + " for " + category; 
 	}
 
 	

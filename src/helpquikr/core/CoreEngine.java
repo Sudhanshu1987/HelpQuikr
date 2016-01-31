@@ -3,7 +3,6 @@ package helpquikr.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +11,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import helpquikr.utils.CommonUtils;
+import io.github.nixtabyte.telegram.jtelebot.client.RequestHandler;
+import io.github.nixtabyte.telegram.jtelebot.exception.JsonParsingException;
+import io.github.nixtabyte.telegram.jtelebot.exception.TelegramServerException;
 import io.github.nixtabyte.telegram.jtelebot.request.TelegramRequest;
 import io.github.nixtabyte.telegram.jtelebot.request.factory.TelegramRequestFactory;
 import io.github.nixtabyte.telegram.jtelebot.response.json.Message;
+import io.github.nixtabyte.telegram.jtelebot.response.json.ReplyKeyboardMarkup;
 
 public class CoreEngine {
 	
@@ -64,9 +67,20 @@ public class CoreEngine {
 		return filteredList;
 	}
 	
-	public void sendAppealsToUser(UserRequest req, List<AppealToBeShown> appeals) {
-//		TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(req.getChatId(), "HelpQuikr", true, message.getId(), null);
-//		requestHandler.sendRequest(request);
+	public void sendAppealsToUser(Message message, RequestHandler requestHandler, List<AppealToBeShown> appeals) throws JsonParsingException, TelegramServerException {
+		ReplyKeyboardMarkup rkm = new ReplyKeyboardMarkup();
+		rkm.setResizeKeyboard(true);
+		rkm.setOneTimeKeyboard(true);
+		rkm.setSelective(true);
+		String results[][] = new String[appeals.size()][]; 
+		for (int i = 0; i < appeals.size(); i++) {
+			results[i][0] = appeals.get(i).toString();
+		}
+		rkm.setKeyboard(results);
+
+		TelegramRequest request = TelegramRequestFactory.createSendMessageRequest(message.getChat().getId(), 
+				"Here are the top appeals near you ...", true, message.getId(), null);
+		requestHandler.sendRequest(request);
 	}
 	
 	public void raiseAsyncFetchRequest(final UserRequest req) {
@@ -75,7 +89,8 @@ public class CoreEngine {
 			@Override
 			public void run() {
 				List<AppealToBeShown> appeals = fetchAppeals(req);
-				sendAppealsToUser(req, appeals);
+				// Emran - Implement this
+//				sendAppealsToUser(req, appeals);
 			}
 			
 		}, 0, 1, TimeUnit.MINUTES);
